@@ -14,13 +14,40 @@ See the License for the specific language governing permissions and
 limitations under the License.import React from "react";
 */
 import { makeStyles } from "@material-ui/core/styles";
-import React from "react";
+import Drawer from "@material-ui/core/Drawer";
+import AppBar from "@material-ui/core/AppBar";
+import CssBaseline from "@material-ui/core/CssBaseline";
+import Toolbar from "@material-ui/core/Toolbar";
+import List from "@material-ui/core/List";
+import Typography from "@material-ui/core/Typography";
+import ListItem from "@material-ui/core/ListItem";
+import { Divider, ListItemIcon, SvgIcon } from "@material-ui/core";
+import ListItemText from "@material-ui/core/ListItemText";
+import React, { Component, useState } from "react";
 
-import { Route, Switch } from "react-router-dom";
+//Import icons
+import HomeIcon from "@material-ui/icons/Home";
+import MenuBookIcon from "@material-ui/icons/MenuBook";
+import CategoryIcon from "@material-ui/icons/Category";
+import PeopleIcon from "@material-ui/icons/People";
+import ReceiptIcon from "@material-ui/icons/Receipt";
+import RotateLeftIcon from "@material-ui/icons/RotateLeft";
+import SettingsIcon from "@material-ui/icons/Settings";
+import ContactSupportIcon from "@material-ui/icons/ContactSupport";
+
+import {
+  BrowserRouter as Router,
+  Route,
+  Switch,
+  NavLink,
+} from "react-router-dom";
+
+import NotFound from "../NotFound";
 import AdminProductDetail from "../AdminProductDetail";
 import AdminProducts from "../AdminProducts";
-import HeaderAminPage from "../HeaderAdminPage";
+import HeaderAdminPage from "../HeaderAdminPage";
 import AdminCategories from "../AdminCategories";
+import AdminOrders from "../AdminOrders"
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -39,12 +66,13 @@ export default function AdminPage() {
   const classes = useStyles();
   return (
     <div className={classes.root}>
-      <HeaderAminPage />
+      <HeaderAdminPage />
       <div className={classes.content}>
         <Switch>
           <Route exact path="/products" component={AdminProducts} />
-          <Route path="/products/:id" component={AdminProductDetail} />
+          <Route exact path="/products/:id" component={AdminProductDetail} />
           <Route exact path="/categories" component={AdminCategories} />
+          <Route exact path="/orders" component={AdminOrders} />
         </Switch>
       </div>
     </div>

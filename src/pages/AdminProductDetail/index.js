@@ -31,6 +31,9 @@ import {
 import "./ProductDetail.scss";
 
 const useStyles = makeStyles((theme) => ({
+  root: {
+    display: "flex",
+  },
   paper: {
     padding: theme.spacing(3, 2),
   },
@@ -137,16 +140,15 @@ export default function AdminProductDetail({ match, location }) {
         </Paper>
       )}
       {!hasErrors && (
-        <Row className="w-100 content">
-          <Col md={4}>
+        <Row className="w-100 d-flex">
+          <Col>
             <Image
-              className="w-50"
               src={product.picture}
               alt={product.name}
               fluid
             />
           </Col>
-          <Col md={8}>
+          <Col>
             <ListGroup className="text-capitalize">
               <ListGroup.Item align="center" style={{ fontSize: "xx-large" }}>
                 {product.name}

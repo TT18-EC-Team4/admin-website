@@ -55,7 +55,7 @@ export default function ClippedDrawer() {
           <List>
             <ListItem>
               <Link href="/" color="inherit">
-                Home
+                Customer
               </Link>
             </ListItem>
             <ListItem>
@@ -66,6 +66,11 @@ export default function ClippedDrawer() {
             <ListItem>
               <Link href="/categories" color="inherit">
                 Categories
+              </Link>
+            </ListItem>
+            <ListItem>
+              <Link href="/orders" color="inherit">
+                Orders
               </Link>
             </ListItem>
           </List>

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { createFactory, useEffect, useState } from "react";
 import { makeStyles, createTheme } from "@material-ui/core/styles";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
@@ -13,6 +13,8 @@ import Button from "@material-ui/core/Button";
 import AddIcon from "@material-ui/icons/Add";
 import axios from "axios";
 import { TextField, Dialog, ThemeProvider } from "@material-ui/core";
+import DeleteIcon from '@material-ui/icons/Delete';
+import EditIcon from '@material-ui/icons/Edit';
 
 import {
   BrowserRouter as Router,
@@ -31,16 +33,28 @@ export default function AdminCategories() {
   const classes = useStyles();
   const [categories, setCategories] = useState([]);
   const [hasErrors, setErrors] = useState(false);
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState([false, false]);
   const [currentCat, setCurrentCat] = useState();
+  const [editCat, setEditCat] = useState({"id": "", "name": ""});
+
+  const [onDelete, setOnDelete] = useState(false);
+  const [onAdd, setOnAdd] = useState(false);
 
   const handleClose = () => {
     setOpen(false);
   };
 
-  const openDialog = () => {
-    setOpen(true);
+  const openDialog = (id) => {
+    const open = [false, false];
+    open[id] = true;
+    setOpen(open);
   };
+
+  const openEditModal = (category) => {
+    openDialog(1);
+    setEditCat(category);
+  }
+
 
   const handleAddCat = () => {
     try {
@@ -48,11 +62,13 @@ export default function AdminCategories() {
         .post(`http://localhost:5000/admin/category`, { name: currentCat })
         .then(async (res) => {
           alert(res.data.msg);
+          setOnAdd(true);
         })
         .catch((err) => {
           setErrors(true);
         });
       setOpen(false);
+      setOnAdd(false);
     } catch {}
   };
 
@@ -62,11 +78,17 @@ export default function AdminCategories() {
         .delete(`http://localhost:5000/admin/category/${category}`)
         .then(async (res) => {
           alert(res.data.msg);
+          setOnDelete(true);
         })
         .catch((err) => {
           setErrors(true);
         });
+      setOnDelete(false);
     } catch {}
+  };
+
+  const handleEditCat = (category) => {
+
   };
 
   const mainTheme = createTheme({
@@ -87,6 +109,7 @@ export default function AdminCategories() {
         .get("http://localhost:5000/admin/category")
         .then(async (res) => {
           setCategories(res.data);
+
         })
         .catch((err) => {
           setErrors(true);
@@ -98,7 +121,7 @@ export default function AdminCategories() {
 
   useEffect(() => {
     fetchData();
-  }, [open]);
+  }, [open, onAdd, onDelete]);
 
   return (
     <div className={classes.root}>
@@ -119,12 +142,12 @@ export default function AdminCategories() {
               variant="contained"
               color="primary"
               startIcon={<AddIcon />}
-              onClick={openDialog}
+              onClick={() => openDialog(0)}
             >
               Add new category
             </Button>
             <Dialog
-              open={open}
+              open={open[0]}
               onClose={handleClose}
               BackdropProps={{
                 style: { backgroundColor: "transparent" },
@@ -176,7 +199,16 @@ export default function AdminCategories() {
                         color="secondary"
                         onClick={() => handleDeleteCat(category.name)}
                       >
-                        Delete
+                        <DeleteIcon />
+                      </Button>
+                    </TableCell>
+                    <TableCell align="center">
+                      <Button
+                        variant="contained"
+                        color="secondary"
+                        onClick={() => openEditModal(category)}
+                      >
+                        <EditIcon />
                       </Button>
                     </TableCell>
                   </TableRow>
@@ -184,6 +216,38 @@ export default function AdminCategories() {
               </TableBody>
             </Table>
           </TableContainer>
+          <Dialog
+            open={open[1]}
+            onClose={handleClose}
+            BackdropProps={{
+              style: { backgroundColor: "transparent" },
+            }}
+          >
+            <form style={{ padding: "20px 60px 20px 60px" }}>
+              <TextField
+                fullWidth
+                name="edit-category"
+                label="Edit category"
+                required
+                value={editCat.name}
+                onChange={(val) => {
+                  setEditCat(val.target.value);
+                }}
+              />
+              <ThemeProvider theme={mainTheme}>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  fullWidth
+                  style={{ marginTop: "10px" }}
+                  onClick={() => handleEditCat(editCat)}
+                  disabled={editCat == ""}
+                >
+                  Save
+                </Button>
+              </ThemeProvider>
+            </form>
+          </Dialog>
         </Paper>
       )}
     </div>
