@@ -86,7 +86,7 @@ export default function AdminProducts() {
 
   const handleProductDetail = (product) => {
     console.log(product);
-    history.push(`/admin/products/${product.id}`, {
+    history.push(`/products/${product.id}`, {
       product: product,
       categories: categories,
     });

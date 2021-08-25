@@ -103,7 +103,7 @@ export default function AdminProductDetail({ match, location }) {
         .delete(`http://localhost:5000/admin/products/${productId}`)
         .then(async (res) => {
           alert(res.data.msg);
-          history.push("/admin/products");
+          history.push("/products");
         })
         .catch((err) => {
           setErrors(true);
